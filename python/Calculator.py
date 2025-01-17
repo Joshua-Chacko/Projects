@@ -54,4 +54,3 @@ else:
 
     print(f"The result of your calculation is: {result}")
 
-    
