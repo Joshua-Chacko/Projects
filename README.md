@@ -12,7 +12,7 @@ A brief description of your project, its purpose, and the problem it solves.
 - [Acknowledgments](#acknowledgments)
 
 ## About the Project
-Provide a brief introduction to your project, its goals, and its key features.
+Starter Projects that I will be working on to better get experience on Programming  
 
 ## Supported Languages
 This repository supports implementations in the following languages:
