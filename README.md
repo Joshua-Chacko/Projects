@@ -1,6 +1,4 @@
-# Project Title
-
-A brief description of your project, its purpose, and the problem it solves.
+# Projects
 
 ## Table of Contents
 - [About the Project](#about-the-project)
