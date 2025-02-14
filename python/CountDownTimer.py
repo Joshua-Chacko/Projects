@@ -19,4 +19,3 @@ class CountDownTimer:
             seconds = 59
 
     print("Time is up!!")
-         
