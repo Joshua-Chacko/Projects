@@ -26,7 +26,7 @@ This repository supports implementations in the following languages:
 ### Prerequisites
 Ensure you have the following installed on your machine:
 
-- Python 3.x
+- Python 3.13
 - Node.js and npm (for JavaScript projects)
 - Java Development Kit (JDK) 11+
 - A C++ compiler (e.g., GCC, Clang, or MSVC)
