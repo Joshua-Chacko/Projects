@@ -1,6 +1,7 @@
 # creating a habit tracker to work on Python syntax
 # starting with basic user input into a list for different habits
 # including adding, deleting, and re-list the differnt habbits
+import json
 
 def main() -> None:
     return_habits = input("Do you want to load saved habits? (y/n): ")
@@ -38,15 +39,16 @@ def main() -> None:
         choice = input("Do You Want to add/delete/list habits (a/d/l) or enter q to quit: ")
 
 def save_habits(habits: list) -> None:
-    with open("habits.txt", "w") as file:
-        for habit in habits:
-            file.write(habit + "\n")
+    habitsdict = {i: n for i, n in enumerate(habits)}
+        
+    with open("habits.json", "w") as file:
+        json.dump(habitsdict, file, indent=4, ensure_ascii=False)
 
 def load_habits() -> list:
     try:
-        with open('habits.txt', 'r') as file:
-            habits = [lines.strip() for lines in file.readlines()]
-            return habits
+        with open('habits.json', 'r') as file:
+            data = json.load(file)
+            return list(data.values()) 
     except FileNotFoundError:
         print("No saved habits found.")
         return
@@ -56,4 +58,5 @@ def list_habits(habits: list) -> None:
         print(i)
 
 
-main()
+if __name__ == "__main__":
+    main()
