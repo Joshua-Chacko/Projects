@@ -3,12 +3,20 @@
 # including adding, deleting, and re-list the differnt habbits
 
 def main() -> None:
+    return_habits = input("Do you want to load saved habits? (y/n): ")
+    if return_habits.lower() == 'y':
+        Habits = load_habits()
+        if Habits is None:
+            Habits = []
+        else:
+            print("Loaded saved habits:")
+            list_habits(Habits)
+    else:
+        Habits = []
     choice = input("Do You Want to add/delete/list habits (a/d/l): ")
-    Habits = []
-    while choice != 'q':
+    while True:
         match choice:
             case 'a':
-                list_habits(Habits)
                 Habits.append(input("Enter A Habit: "))
             case 'd':
                 list_habits(Habits)
@@ -19,9 +27,29 @@ def main() -> None:
                     print("Not a habit")
             case 'l':
                 list_habits(Habits)
+            case 'q':
+                print("Quitting the habit tracker.")
+                print("Saveing Habits...")
+                list_habits(Habits)
+                save_habits(Habits)
+                quit()
             case _:
                 print("Not an option! (a/d/l)")
         choice = input("Do You Want to add/delete/list habits (a/d/l) or enter q to quit: ")
+
+def save_habits(habits: list) -> None:
+    with open("habits.txt", "w") as file:
+        for habit in habits:
+            file.write(habit + "\n")
+
+def load_habits() -> list:
+    try:
+        with open('habits.txt', 'r') as file:
+            habits = [lines.strip() for lines in file.readlines()]
+            return habits
+    except FileNotFoundError:
+        print("No saved habits found.")
+        return
 
 def list_habits(habits: list) -> None:
     for i in habits:
