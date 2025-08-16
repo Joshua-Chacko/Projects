@@ -47,8 +47,14 @@ cd your-repo-name
 Follow the setup instructions for your language of choice:
 
 #### Python
+Set up Python enviornment
 ```bash
-pip install -r requirements.txt
+py -m venv venv\
+venv\Scripts\activate
+```
+install any libraries
+```bash
+pip -m install requirements.txt
 ```
 
 #### JavaScript
