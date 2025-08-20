@@ -108,10 +108,7 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature-name`).
 5. Open a pull request.
 
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Acknowledgments
 
-- Mention any resources, libraries, or people who contributed to the project.
+- Used chatgpt to help with understanding and helping with debugging code
