@@ -77,8 +77,9 @@ def chechIfPalindrome(n):
         
         # Remove the last digit from original number and recurse
         return reverse_helper(num // 10, new_reversed)
+    
     return n == reverse_helper(n)
-    pass
+
 
 def main() -> None:
     print(chechIfPalindrome(12221))
