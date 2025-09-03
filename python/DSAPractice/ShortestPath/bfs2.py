@@ -10,9 +10,9 @@ def print_grid(filename, grid) -> None:
                 print(line.rstrip('\n'))
         print(f"================{(len(filename)+2) * "="}================")
     else:
-        print(f"================={(len(grid) + 2) * "="}=================")
-        for line in grid:
-            print(line)
+        # Fixed: properly format the grid without quotes
+        for row in grid:
+            print(''.join(str(cell) for cell in row))
         print(f"================={(len(grid) + 2) * "="}=================")
 
 
@@ -45,12 +45,26 @@ def parse_gird(filename):
 
     return int_grid, start_pos, end_pos
 
+def return_grid(grid, char_map):
+    int_grid = []
+
+    for line in grid:
+        rows = []
+        for char in line:
+            if char == "\n":
+                continue
+            value = char_map.get(char, 0)
+            rows.append(value)
+        int_grid.append(rows)
+    return int_grid
+
 def bfs(grid, start_pos, end_pos):
     """ given the parse_grids grid, start, and end position:
             - traverse the grid from start to end
             - keep track of the shortest distance
             - show the path on the grid """
     
+    char_map = {1: '#', 0: ' ', '*': '*'}
     # create a moves that goes through all the motions up, down, left, and right
     moves = [[1,0], [0,1], [-1,0], [0,-1]]
     # create the start position (x,y) and end position (x,y)
@@ -79,18 +93,53 @@ def bfs(grid, start_pos, end_pos):
                 queue.append((new_x, new_y))
                 visited[new_x][new_y] = True
                 distance[new_x][new_y] = distance[x][y] + 1
-    # return distance[end_pos] if visited[end] else -1
-    return distance[end_x][end_y] if visited[end_x][end_y] else -1
     
+    def backtracking():
+        print(f"End position distance: {distance[end_x][end_y]}\n")
+                
+        curr_x, curr_y = end_x, end_y
+        grid[curr_x][curr_y] = "*"
+        
+        while curr_x != start_x or curr_y != start_y:
+            curr_distance = distance[curr_x][curr_y]
+            found_next = False
+            
+            for dx, dy in moves:
+                new_x = curr_x + dx
+                new_y = curr_y + dy
+                
+                if (0 <= new_x < rows and 0 <= new_y < cols):
+                    if distance[new_x][new_y] == curr_distance - 1:
+                        curr_x, curr_y = new_x, new_y
+                        grid[curr_x][curr_y] = "*"
+                        found_next = True
+                        break
+            
+            if not found_next:
+                print("No valid neighbor found!")
+                break
+        
+        return return_grid(grid, char_map)
+
+    # return distance[end_pos] if visited[end] else -1
+    return distance[end_x][end_y] if visited[end_x][end_y] else -1, backtracking()
+
 
 
 def main() -> None:
     """ Initializes each function and prints the shortest path and final grid """
-    print_grid("maze.txt", None)
-    maze, start_pos, end_pos = parse_gird("maze.txt")
-    print_grid(None, maze)
-    shortest_path = bfs(maze, start_pos, end_pos)
-    print(shortest_path)
+    mazes = ["maze.txt", "maze1.txt", "maze2.txt", "maze3.txt", "maze4.txt"]
+    for filename in mazes:
+        print_grid(filename, None)
+        maze, start_pos, end_pos = parse_gird(filename)
+        print_grid(None, maze)
+        shortest_path, maze = bfs(maze, start_pos, end_pos)
+        if shortest_path != -1:
+            print_grid(None, maze)
+            print(f"\nlength of the shortest path for {filename} = {shortest_path}\n")
+        else:
+            print_grid(None, maze)
+            print(f"There is no path from start to end position")
 
 
 if __name__ == '__main__':
