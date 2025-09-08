@@ -1,0 +1,52 @@
+<!-- base.html - Fixed version -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>Habit Tracker</title>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <!-- Fixed: Use the actual function name from your Flask route -->
+            <a href="{{ url_for('HomePage') }}" class="logo">Habit Tracker</a>
+            
+            <ul class="nav-menu">
+                <!-- Fixed: Use the actual function name and pass active_page from route -->
+                <li><a href="{{ url_for('HomePage') }}" class="{% if active_page == 'home' %}active{% endif %}">Home</a></li>
+                <!-- Add more navigation items as needed -->
+                <li><a href="{{ url_for('habits') }}" class="{% if active_page == 'habits' %}active{% endif %}">My Habits</a></li> 
+                <li><a href="{{ url_for('analytics') }}" class="{% if active_page == 'analytics' %}active{% endif %}">Analytics</a></li> 
+            </ul>
+
+            <div class="mobile-menu" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Fixed: Moved the content block outside of nav and added script -->
+    <div class="content">
+        {% block body %}{% endblock %}
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const navMenu = document.querySelector('.nav-menu');
+            navMenu.classList.toggle('active');
+        }
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu li a').forEach(link => {
+            link.addEventListener('click', () => {
+                const navMenu = document.querySelector('.nav-menu');
+                navMenu.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>
