@@ -252,3 +252,50 @@ nav {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
+
+/* Center the whole form */
+.habit-form {
+    display: flex;
+    flex-direction: column;   /* stack input and button */
+    align-items: center;      /* center horizontally */
+    gap: 1rem;                /* space between input and button */
+    margin-top: 1.5rem;
+}
+
+/* Style for form input */
+form input[type="text"] {
+    padding: 0.75rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+}
+
+form input[type="text"]:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 6px rgba(102, 126, 234, 0.4);
+}
+
+/* Enhanced button styles */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.75rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px; /* more rounded */
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+}
+
+.btn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 18px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, #5a6fd6 0%, #6a3f91 100%);
+}
