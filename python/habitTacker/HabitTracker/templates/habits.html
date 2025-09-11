@@ -3,4 +3,20 @@
 {% block body %}
 <h1>Here Contains Your Habits</h1>
 <!-- Your home page content here -->
+
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Habit</th>
+        <th>Time</th>
+    </tr>
+    {% for entry in entries %}
+    <tr>
+        <th>{{entry.id}}</th>
+        <th>{{entry.habit}}</th>
+        <th>{{entry.created_at.strftime("%Y-%m-%d %H:%M:%S")}}</th>
+    </tr>
+    {% endfor %}
+</table>
+
 {% endblock %}

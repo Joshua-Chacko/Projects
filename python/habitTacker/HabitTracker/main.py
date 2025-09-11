@@ -21,16 +21,19 @@ with app.app_context():
 
 @app.route('/')
 def HomePage():
-    # grabs all the values in the database
-    entries = Habit.query.all()
-    return render_template('home.html', active_page='home', entries=entries)
+    return render_template('home.html', active_page='home')
     
-@app.route('/habits', methods=['POST'])
-def habits():
+@app.route('/addhabits', methods=['POST'])
+def add_habits():
     new_habit = Habit(habit=request.form['user_input'])
     db.session.add(new_habit)
     db.session.commit()
     return redirect('/')
+
+@app.route('/habits')
+def habits():
+    entries = Habit.query.all()
+    return render_template('habits.html', active_page='habits', entries=entries)
 
 @app.route('/analytics') 
 def analytics():
