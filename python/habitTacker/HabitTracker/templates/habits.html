@@ -2,21 +2,131 @@
 
 {% block body %}
 <h1>Here Contains Your Habits</h1>
-<!-- Your home page content here -->
 
-<table>
-    <tr>
-        <th>ID</th>
-        <th>Habit</th>
-        <th>Time</th>
-    </tr>
-    {% for entry in entries %}
-    <tr>
-        <th>{{entry.id}}</th>
-        <th>{{entry.habit}}</th>
-        <th>{{entry.created_at.strftime("%Y-%m-%d %H:%M:%S")}}</th>
-    </tr>
-    {% endfor %}
-</table>
+<div class="table-container">
+    <table id="habitsTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Habit</th>
+                <th>Time</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in entries %}
+            <tr>
+                <td>{{entry.id}}</td>
+                <td>{{entry.habit}}</td>
+                <td>{{entry.created_at.strftime("%Y-%m-%d %H:%M:%S")}}</td>
+                <td>
+                    <button class="delete-btn" onclick="confirmDelete({{entry.id}}, '{{entry.habit|safe}}')">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="edit-container">
+    <button class="btn" id="editToggle" onclick="toggleEditMode()">Edit</button>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h3>Confirm Delete</h3>
+        <p id="deleteMessage">Are you sure you want to delete this habit?</p>
+        <div class="modal-buttons">
+            <button class="confirm-btn" onclick="deleteHabit()">Yes, Delete</button>
+            <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let editMode = false;
+    let habitToDelete = null;
+
+    function toggleEditMode() {
+        const table = document.getElementById('habitsTable');
+        const editButton = document.getElementById('editToggle');
+        
+        editMode = !editMode;
+        
+        if (editMode) {
+            table.classList.add('edit-mode');
+            editButton.textContent = 'Done';
+            editButton.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
+        } else {
+            table.classList.remove('edit-mode');
+            editButton.textContent = 'Edit';
+            editButton.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        }
+    }
+
+    function confirmDelete(id, habitName) {
+        habitToDelete = id;
+        document.getElementById('deleteMessage').textContent = `Are you sure you want to delete "${habitName}"?`;
+        document.getElementById('deleteModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+        habitToDelete = null;
+    }
+
+    function deleteHabit() {
+        if (habitToDelete) {
+            // Make AJAX request to Flask backend
+            fetch('/delete_habit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({id: habitToDelete})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Remove the row from the table
+                    const rows = document.querySelectorAll('#habitsTable tbody tr');
+                    rows.forEach(row => {
+                        if (row.cells[0].textContent == habitToDelete) {
+                            row.style.transition = 'all 0.3s ease';
+                            row.style.opacity = '0';
+                            row.style.transform = 'translateX(-100%)';
+                            setTimeout(() => row.remove(), 300);
+                        }
+                    });
+                    closeModal();
+                } else {
+                    alert('Error deleting habit: ' + data.message);
+                    closeModal();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the habit');
+                closeModal();
+            });
+        }
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        const modal = document.getElementById('deleteModal');
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
 
 {% endblock %}

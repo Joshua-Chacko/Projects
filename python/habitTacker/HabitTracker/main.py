@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
@@ -35,8 +35,30 @@ def habits():
     entries = Habit.query.all()
     return render_template('habits.html', active_page='habits', entries=entries)
 
+@app.route('/delete_habit', methods=['POST'])
+def delete_habit():
+    try:
+        # Get the habit ID from the request
+        habit_id = request.json.get('id')
+        
+        # Find the habit in the database
+        habit = Habit.query.get(habit_id)
+        
+        if habit:
+            # Delete the habit
+            db.session.delete(habit)
+            db.session.commit()
+            return jsonify({'success': True, 'message': 'Habit deleted successfully'})
+        else:
+            return jsonify({'success': False, 'message': 'Habit not found'}), 404
+            
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': str(e)}), 500
+
 @app.route('/analytics') 
 def analytics():
     return render_template('analytics.html', active_page='analytics')
+
 if __name__ == '__main__':
     app.run(debug=True)
