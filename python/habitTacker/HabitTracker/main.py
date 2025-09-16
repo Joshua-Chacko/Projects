@@ -11,9 +11,28 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Habit(db.Model):
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    __tablename__ = 'habits'
+    habit_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     habit = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    # Defines the foreign key
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+
+    def __repr__(self):
+        return f'<Habit {self.habit_name}>'
+    
+
+class Users(db.Model):
+    __tablename__ = 'users'
+    user_id = db.Column(db.Integer, primary_key = True, autoincrement=True)
+    username = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(20), nullable=False)
+
+    # Define the realtionship to the 'Habit' Model
+    habits = db.relationship('Habit', backref='user', lazy=True)
+
+    def __repr__(self):
+        return f'<User {self.username}>'
 
 # Create the database tables (run once)
 with app.app_context():

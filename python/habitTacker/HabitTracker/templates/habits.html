@@ -16,11 +16,11 @@
         <tbody>
             {% for entry in entries %}
             <tr>
-                <td>{{entry.id}}</td>
+                <td>{{entry.habit_id}}</td>
                 <td>{{entry.habit}}</td>
                 <td>{{entry.created_at.strftime("%Y-%m-%d %H:%M:%S")}}</td>
                 <td>
-                    <button class="delete-btn" onclick="confirmDelete({{entry.id}}, '{{entry.habit|safe}}')">Delete</button>
+                    <button class="delete-btn" onclick="confirmDelete({{entry.habit_id}}, '{{entry.habit|safe}}')">Delete</button>
                 </td>
             </tr>
             {% endfor %}
