@@ -1,34 +1,26 @@
 import random
-import matplotlib.pyplot as plt
 
 
-def insertion_sort_visual(data):
-    plt.ion()  # turn on interactive mode
-    fig, ax = plt.subplots()
-
-    for i in range(1, len(data)):
-        key = data[i]
-        j = i - 1
-        while j >= 0 and data[j] > key:
-            data[j + 1] = data[j]
+def insertionSort(sortedArray):
+    # start at 1st index
+    # compare with index 1 to i-1
+    # then sort 
+    
+    
+    for i in range(1,len(sortedArray)):
+        if i == 0:
+            continue
+        j = i
+        while j > 0 and sortedArray[j] < sortedArray[j-1]:
+            sortedArray[j], sortedArray[j-1] = sortedArray[j-1], sortedArray[j]
             j -= 1
-            ax.clear()
-            ax.bar(range(len(data)), data, color="skyblue")
-            ax.set_title(f"Insertion Sort Step {i}")
-            plt.pause(0.01)  # pause to create animation effect
-        data[j + 1] = key
-
-    plt.ioff()
-    plt.show()
-    return data
+    return sortedArray
 
 
 def main():
-    data_size = 30  # keep small so visualization is clear
-    data = [random.randint(1, 100) for _ in range(data_size)]
-    print("Unsorted:", data)
-    sorted_data = insertion_sort_visual(data)
-    print("Sorted:", sorted_data)
+    Array = [random.randint(0,10) for i in range(10)] 
+    print(Array)
+    print(insertionSort(Array))
 
 
 if __name__ == "__main__":
